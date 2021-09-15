@@ -108,7 +108,7 @@ class JsonAdaptedPerson {
 
         final Remark modelRemark = new Remark(""); //TODO: Implement parsing and marshalling in the storage commit.
 
-        if(remark == null) {
+        if (remark == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Remark.class.getSimpleName()));
         }
 

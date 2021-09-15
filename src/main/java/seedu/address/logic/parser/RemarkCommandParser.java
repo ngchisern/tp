@@ -10,7 +10,7 @@ import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Remark;
 
-public class RemarkCommandParser implements Parser<RemarkCommand>{
+public class RemarkCommandParser implements Parser<RemarkCommand> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the {@code RemarkCommand}
