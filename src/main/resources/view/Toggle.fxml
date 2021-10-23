@@ -7,12 +7,17 @@
 
 <StackPane fx:id="placeHolder" styleClass="pane-without-border" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
     <HBox alignment="BOTTOM_LEFT">
-        <ToggleButton fx:id="clients" mnemonicParsing="false" onAction="#handleClientsPressed" prefWidth="100.0" selected="true" text="Clients">
+        <ToggleButton mnemonicParsing="false" onAction="#handleClientsPressed" prefWidth="100.0" selected="true" text="Clients">
             <toggleGroup>
                 <ToggleGroup fx:id="datatype" />
             </toggleGroup>
         </ToggleButton>
-        <ToggleButton fx:id="tasks" mnemonicParsing="false" onAction="#handleTasksPressed" prefWidth="100.0" text="Tasks">
+        <ToggleButton mnemonicParsing="false" onAction="#handleTasksPressed" prefWidth="100.0" text="Tasks">
+            <toggleGroup>
+                <fx:reference source="datatype" />
+            </toggleGroup>
+        </ToggleButton>
+        <ToggleButton mnemonicParsing="false" onAction="#handleOrdersPressed" prefWidth="100.0" text="Orders">
             <toggleGroup>
                 <fx:reference source="datatype" />
             </toggleGroup>

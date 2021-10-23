@@ -2,9 +2,12 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Comparator;
 import java.util.List;
 
 import javafx.collections.ObservableList;
+import seedu.address.model.order.Order;
+import seedu.address.model.order.OrderList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.task.Task;
@@ -19,6 +22,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
     private final TaskList tasks;
+    private final OrderList orders;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -30,6 +34,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     {
         persons = new UniquePersonList();
         tasks = new TaskList();
+        orders = new OrderList();
     }
 
     public AddressBook() {}
@@ -108,7 +113,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.remove(key);
     }
 
-
     //// task-level operations
 
     public void addTask(Task toAdd) {
@@ -119,16 +123,42 @@ public class AddressBook implements ReadOnlyAddressBook {
         tasks.remove(toDelete);
     }
 
-    public void markDone(Task task) {
-        tasks.markDone(task);
+    public void markTask(Task task) {
+        tasks.markTask(task);
     }
 
-    public void setTask(Task target, Task editedtask) {
-        tasks.setTask(target, editedtask);
+    public void setTask(Task target, Task editedTask) {
+        tasks.setTask(target, editedTask);
     }
 
     public boolean hasTask(Task task) {
         return tasks.hasTask(task);
+    }
+
+    /// order-level operations
+
+    public void addOrder(Order toAdd) {
+        orders.add(toAdd);
+    }
+
+    public void deleteOrder(Order toDelete) {
+        orders.remove(toDelete);
+    }
+
+    public void markOrder(Order order) {
+        orders.markComplete(order);
+    }
+
+    public void setOrder(Order target, Order editedOrder) {
+        orders.setOrder(target, editedOrder);
+    }
+
+    public boolean hasOrder(Order order) {
+        return orders.hasOrder(order);
+    }
+
+    public void sortOrders(Comparator<Order> comparator) {
+        orders.sort(comparator);
     }
 
 
@@ -136,8 +166,9 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     @Override
     public String toString() {
-        return persons.asUnmodifiableObservableList().size() + " persons";
-        // TODO: refine later
+        return persons.asUnmodifiableObservableList().size() + " persons; "
+                + tasks.asUnmodifiableObservableList().size() + " tasks; "
+                + orders.asUnmodifiableObservableList().size() + " orders.";
     }
 
     @Override
@@ -148,6 +179,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public ObservableList<Task> getTaskList() {
         return tasks.asUnmodifiableObservableList();
+    }
+
+    @Override
+    public ObservableList<Order> getOrderList() {
+        return orders.asUnmodifiableObservableList();
     }
 
     @Override

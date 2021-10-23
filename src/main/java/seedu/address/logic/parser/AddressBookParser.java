@@ -7,10 +7,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddOrderCommand;
 import seedu.address.logic.commands.AddTaskCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteOrderCommand;
 import seedu.address.logic.commands.DeleteTaskCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditTaskCommand;
@@ -19,7 +21,14 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListTaskCommand;
-import seedu.address.logic.commands.MarkDoneCommand;
+import seedu.address.logic.commands.MarkOrderCommand;
+import seedu.address.logic.commands.MarkTaskCommand;
+import seedu.address.logic.commands.ShowCompletedOrders;
+import seedu.address.logic.commands.ShowCompletedTasks;
+import seedu.address.logic.commands.ShowIncompleteOrders;
+import seedu.address.logic.commands.ShowIncompleteTasks;
+import seedu.address.logic.commands.SortOrdersByAmountCommand;
+import seedu.address.logic.commands.TotalOrdersCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -61,6 +70,9 @@ public class AddressBookParser {
         case ClearCommand.COMMAND_WORD:
             return new ClearCommand();
 
+        case SortOrdersByAmountCommand.COMMAND_WORD:
+            return new SortOrdersByAmountCommand();
+
         case FindCommand.COMMAND_WORD:
             return new FindCommandParser().parse(arguments);
 
@@ -82,11 +94,35 @@ public class AddressBookParser {
         case DeleteTaskCommand.COMMAND_WORD:
             return new DeleteTaskCommandParser().parse(arguments);
 
+        case MarkTaskCommand.COMMAND_WORD:
+            return new MarkTaskCommandParser().parse(arguments);
+
         case ListTaskCommand.COMMAND_WORD:
             return new ListTaskCommand();
 
-        case MarkDoneCommand.COMMAND_WORD:
-            return new MarkDoneCommandParser().parse(arguments);
+        case ShowCompletedTasks.COMMAND_WORD:
+            return new ShowCompletedTasks();
+
+        case ShowIncompleteTasks.COMMAND_WORD:
+            return new ShowIncompleteTasks();
+
+        case MarkOrderCommand.COMMAND_WORD:
+            return new MarkOrderCommandParser().parse(arguments);
+
+        case AddOrderCommand.COMMAND_WORD:
+            return new AddOrderCommandParser().parse(arguments);
+
+        case ShowCompletedOrders.COMMAND_WORD:
+            return new ShowCompletedOrders();
+
+        case ShowIncompleteOrders.COMMAND_WORD:
+            return new ShowIncompleteOrders();
+
+        case DeleteOrderCommand.COMMAND_WORD:
+            return new DeleteOrderCommandParser().parse(arguments);
+
+        case TotalOrdersCommand.COMMAND_WORD:
+            return new TotalOrdersCommand();
 
         default:
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

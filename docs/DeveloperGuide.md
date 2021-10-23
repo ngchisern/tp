@@ -3,7 +3,27 @@ layout: page
 title: Developer Guide
 ---
 * Table of Contents
-{:toc}
+    - [Acknowledgements](#acknowledgements)
+    - [Setting up, getting started](#setting-up-getting-started)
+    - [Design](#design)
+        - [Architecture](#architecture)
+        - [UI Component](#ui-component)
+        - [Logic Component](#logic-component)
+        - [Model Component](#model-component)
+        - [Storage Component](#storage-component)
+        - [Common classes](#common-classes)
+    - [Implementation](#implementation)
+    - [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+    - [Appendix: Requirements](#appendix-requirements)
+        - [Product scope](#product-scope)
+        - [User stories](#user-stories)
+        - [Use cases](#use-cases)
+        - [Non-functional Requirements](#non-functional-requirements)
+        - [Glossary](#glossary)
+    - [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+        - [Launch and shutdown](#launch-and-shutdown)
+        - [Deleting a person](#deleting-a-client)
+        - [Saving data](#saving-data)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -149,10 +169,80 @@ The `Storage` component,
 Classes used by multiple components are in the `seedu.salesnote.commons` package.
 
 --------------------------------------------------------------------------------------------------------------------
+## **Implementation - Shawn **
+
+(this division and header is temporary; and is just to demarcate my part of the DG update for this week's requirement)
+
+###`task` and `order` package
+This section describes the implementation of the `task` and `order` packages in the application. These two packages are 
+similar in functionality to the `person` package, now allowing the user to track tasks and orders. Below is a diagram
+showing the partial implementation of these packages in the application:
+
+![`Updated Model Diagram`](images/UpdatedModelClassDiagram.png)
+
+`OrderList` and `TaskList` manage `Order` and `Task` objects, in the same way a `UniquePersonList` manages `Person`
+objects, and there are a few significant points about this implementation.
+
+The first is the distinction between the `Person` class, and the `Customer` class. Since every order is made by 
+a customer, and the `Person` class is used to track customers, we initially considered linking the two classes, and tying
+every `Order` to a `Person`. However, the issue with this is that we did not want deleting of a `Person` to affect 
+sales records, which should continue to show all completed orders. We thus decided instead to create the `Customer` 
+class which essentially serves as a field for the `Order` class, implementing validity checks for the input, similar to 
+how the `Name` field works for the `Person` class.
+
+The next note is that a `UniquePersonList` has a `AddressBook` wrapper that contains other functionalities needed in
+the application (e.g. storage related functions). Our Implementation intends to mirror this with a `TaskBook` and 
+`OrderBook` wrapper around `TaskList` and `OrderList` respectively, but this was not handled by me, and hence these 
+were omitted from the diagram above.
+
+Finally, as mentioned partially above, the `Amount` `Customer` `Date` and `Label` classes are what handle checking the 
+validity of fields, similar to the implementation in the associated classes for Person, and also respect a whole-part 
+relationship. The validity checking in all cases was implemented using regular expressions, and they respect the
+following guarantees:
+
+`Amount` Begins with 1 or more numbers, followed optionally by a block that consists of a '.' followed by 1 or 2 numbers.
+
+`Customer` Blocks of 1 or more alphanumeric characters, separated by at most one space.
+
+`Date` `Label` Nonempty block of alphanumeric characters of length at most 100 characters. We felt this was a reasonable
+length for both fields, and would guarantee the UI display worked the way we intended.'
+
+### Addressing feature flaws
+
+A small and related task I addressed was input validation for customers, and adjusting the way we treated equality 
+between person objects. The original AB3 treated two people as equal only if their names were spelt exactly the same, 
+with this being case-sensitive. When we discussed this as a group, we decided that multiple clients having the exact same name was rare
+enough that this notion of equality made sense. However, we felt it should apply regardless of case, i.e. john doe 
+should be recognised as the same person as JOHN DOE. I updated the implementation to take care of this, and also changed
+the input validation for `Name` to allow at most one space between blocks of characters.
+
+### Implementing commands
+
+Lastly, I implemented several commands related to the `Task` and `Order` classes. These are fairly self-explanatory, 
+and their implementation closely mirrors that of similar commands for the `Person` class. The exception is the marktask
+and markorder commands, which allow the user to mark tasks and orders as completed. The list of implemented commands
+is below:
+
+* addtask
+* deletetask
+* listtask
+* marktask
+* markorder
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
 
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### Display client's total orders feature
+
+#### Implementation
+
+The feature displays the total orders for each client in a new window. Its mechanism is a mix of the mechanisms for `MainWindow` and `HelpWindow`. 
 
 ### \[Proposed\] Undo/redo feature
 
@@ -311,7 +401,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `SalesNote` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Add a client**
+#### Use case: Add a client
 
 **MSS**
 
@@ -329,7 +419,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case ends.
 
 
-**Use case: Delete a client**
+#### Use case: Delete a client
 
 **MSS**
 
@@ -351,9 +441,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3a1. SalesNote shows an error message.
 
       Use case resumes at step 2.
-
-
-**Use case: Add a task**
+    
+#### Use case: Add a task
 
 **MSS**
 
@@ -371,7 +460,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case ends.
 
 
-**Use case: Delete a task**
+#### Use case: Delete a task
 
 **MSS**
 
@@ -393,6 +482,47 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3a1. SalesNote shows an error message.
 
       Use case resumes at step 2.
+
+#### Use case: Add an order
+
+**MSS**
+
+1. User requests to add a specific order to the list
+2. SalesNote adds the order
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. The format of the request is invalid.
+
+    * 1a1. SalesNote shows an error message.
+
+      Use case ends.
+
+#### Use case: Delete an order
+
+**MSS**
+
+1.  User requests to list orders
+2.  SalesNote shows a list of orders
+3.  User requests to delete a specific order in the list
+4.  SalesNote deletes the order
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a. The given index is invalid.
+
+    * 3a1. SalesNote shows an error message.
+
+      Use case resumes at step 2.
+
 
 *{More to be added}*
 

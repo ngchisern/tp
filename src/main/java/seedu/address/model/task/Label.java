@@ -5,11 +5,13 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Task's label in the application
- * Guarantee: The label is a non-empty string.
  */
 public class Label {
     public static final String MESSAGE_CONSTRAINTS =
-            "Label should be non-empty"; //temporary solution
+            "Label should begin with an alphanumeric character, followed by up to 99 more characters that"
+            + "are alphanumeric or spaces";
+
+    public static final String VALIDATION_REGEX = "\\p{Alnum}+[ \\p{Alnum}]*";
 
     public final String checkedLabel;
 
@@ -25,12 +27,12 @@ public class Label {
     }
 
     /**
-     * Returns true if a given string is a valid name.
+     * Returns true if a given string is a valid label.
      *
-     * @param label Label to be checked
+     * @param test Label to be checked
      */
-    public static boolean isValidLabel(String label) {
-        return !label.equals("");
+    public static boolean isValidLabel(String test) {
+        return test.matches(VALIDATION_REGEX) && test.length() <= 100;
     }
 
     @Override

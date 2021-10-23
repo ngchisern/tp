@@ -1,13 +1,16 @@
 package seedu.address;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.ClientTotalOrder;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.order.Order;
 import seedu.address.model.person.Person;
 import seedu.address.model.task.Task;
 
@@ -116,7 +119,57 @@ public class ModelStub implements Model {
     }
 
     @Override
-    public void markDone(Task task) {
+    public void markTask(Task task) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void markOrder(Order order) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public ObservableList<ClientTotalOrder> getClientTotalOrders() {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public ObservableList<Order> getFilteredOrderList() {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void addOrder(Order order) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public boolean hasOrder(Order order) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void setOrder(Order target, Order editedOrder) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void deleteOrder(Order toDelete) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void updateFilteredOrderList(Predicate<Order> predicate) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void sortOrderList(Comparator<Order> comparator) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void resetOrderView() {
         throw new AssertionError("This method should not be called.");
     }
 }

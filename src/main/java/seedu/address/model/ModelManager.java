@@ -4,13 +4,16 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.order.Order;
 import seedu.address.model.person.Person;
 import seedu.address.model.task.Task;
 
@@ -24,6 +27,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final FilteredList<Task> filteredTasks;
+    private final FilteredList<Order> filteredOrders;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -36,6 +40,8 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         filteredTasks = new FilteredList<>(this.addressBook.getTaskList());
+        filteredOrders = new FilteredList<>(this.addressBook.getOrderList());
+
     }
 
     public ModelManager() {
@@ -116,7 +122,7 @@ public class ModelManager implements Model {
     //=========== Task Management ==================================================================================
 
     /**
-     * check if tasklist has this task.
+     * Checks if tasklist has this task.
      */
     @Override
     public boolean hasTask(Task task) {
@@ -125,7 +131,7 @@ public class ModelManager implements Model {
     }
 
     /**
-     * adding a task to tasklist.
+     * Adds a task to tasklist.
      */
     public void addTask(Task toAdd) {
         addressBook.addTask(toAdd);
@@ -133,7 +139,7 @@ public class ModelManager implements Model {
     }
 
     /**
-     * deleting a task from tasklist.
+     * Deletes a task from tasklist.
      */
     public void deleteTask(Task toDelete) {
         addressBook.deleteTask(toDelete);
@@ -153,13 +159,89 @@ public class ModelManager implements Model {
     @Override
     public void updateFilteredTaskList(Predicate<Task> predicate) {
         requireNonNull(predicate);
-        System.out.println(filteredTasks);
         filteredTasks.setPredicate(predicate);
     }
 
-    public void markDone(Task task) {
-        addressBook.markDone(task);
+    public void markTask(Task task) {
+        addressBook.markTask(task);
     }
+
+
+    //=========== Order Management ==================================================================================
+
+    /**
+     * Checks if orderlist has this order.
+     */
+    @Override
+    public boolean hasOrder(Order order) {
+        requireNonNull(order);
+        return addressBook.hasOrder(order);
+    }
+
+    @Override
+    public void setOrder(Order target, Order editedOrder) {
+        requireAllNonNull(target, editedOrder);
+        addressBook.setOrder(target, editedOrder);
+    }
+
+    /**
+     * Adds an order to orderlist.
+     */
+    public void addOrder(Order toAdd) {
+        addressBook.addOrder(toAdd);
+        resetOrderView();
+    }
+
+    /**
+     * Deletes an order from orderlist.
+     */
+    public void deleteOrder(Order toDelete) {
+        addressBook.deleteOrder(toDelete);
+    }
+
+    @Override
+    public ObservableList<Order> getFilteredOrderList() {
+        return filteredOrders;
+    }
+
+    @Override
+    public void updateFilteredOrderList(Predicate<Order> predicate) {
+        requireNonNull(predicate);
+        filteredOrders.setPredicate(predicate);
+    }
+
+    /**
+     * Marks an order as completed
+     */
+    public void markOrder(Order order) {
+        addressBook.markOrder(order);
+    }
+
+    /**
+     * For each person, finds orders associated with the person, and adds up the amount.
+     * Creates a ClientTotalOrder for each person.
+     *
+     * @return an ObservableList of {@code ClientTotalOrder}.
+     */
+    @Override
+    public ObservableList<ClientTotalOrder> getClientTotalOrders() {
+        ObservableList<ClientTotalOrder> clientTotalOrders = FXCollections.observableArrayList();
+        for (Person client : addressBook.getPersonList()) {
+            clientTotalOrders.add(getClientTotalOrder(client));
+        }
+        return clientTotalOrders;
+    }
+
+    private ClientTotalOrder getClientTotalOrder(Person client) {
+        String clientName = client.getName().toString();
+        Predicate<Order> correctClient = (order) -> order.getCustomer().toString().equals(clientName);
+        double totalOrder = addressBook.getOrderList().stream()
+                .filter(correctClient)
+                .mapToDouble(Order::getAmountAsDouble)
+                .sum();
+        return new ClientTotalOrder(clientName, totalOrder);
+    }
+
 
     //=========== Filtered Person List Accessors =============================================================
 
@@ -195,6 +277,19 @@ public class ModelManager implements Model {
         return addressBook.equals(other.addressBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredPersons.equals(other.filteredPersons);
+    }
+
+    @Override
+    public void sortOrderList(Comparator<Order> comparator) {
+        addressBook.sortOrders(comparator);
+        filteredOrders.setPredicate(PREDICATE_SHOW_ALL_ORDERS);
+    }
+
+    @Override
+    public void resetOrderView() {
+        Comparator<Order> defaultComparator = Order::compareTo;
+        addressBook.sortOrders(defaultComparator);
+        updateFilteredOrderList(PREDICATE_SHOW_ALL_ORDERS);
     }
 
 }

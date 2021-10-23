@@ -1,12 +1,14 @@
-package seedu.address.model.task;
+package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 public class Date {
     public static final String MESSAGE_CONSTRAINTS =
-            "Date should be non-empty"; //temporary solution
+            "Date should begin with an alphanumeric character, followed by up to 99 more characters that"
+            + "are alphanumeric or spaces";
 
+    public static final String VALIDATION_REGEX = "\\p{Alnum}+[ \\p{Alnum}]*";
     public final String parsedDate;
 
     /**
@@ -20,8 +22,8 @@ public class Date {
         parsedDate = date;
     }
 
-    public static boolean isValidDate(String date) {
-        return !date.equals("");
+    public static boolean isValidDate(String test) {
+        return test.matches(VALIDATION_REGEX) && test.length() <= 100;
     }
 
     @Override

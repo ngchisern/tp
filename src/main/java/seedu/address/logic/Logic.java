@@ -7,7 +7,9 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ClientTotalOrder;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.order.Order;
 import seedu.address.model.person.Person;
 import seedu.address.model.task.Task;
 
@@ -37,6 +39,9 @@ public interface Logic {
     /** Returns an unmodifiable view of the filtered list of tasks */
     ObservableList<Task> getFilteredTaskList();
 
+    /** Returns an unmodifiable view of the filtered list of orders */
+    ObservableList<Order> getFilteredOrderList();
+
     /**
      * Returns the user prefs' address book file path.
      */
@@ -51,4 +56,7 @@ public interface Logic {
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /** Returns an unmodifiable view of the list of ClientTotalOrders */
+    ObservableList<ClientTotalOrder> getClientTotalOrders();
 }

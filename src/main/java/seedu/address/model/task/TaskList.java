@@ -8,8 +8,7 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.address.model.person.exceptions.DuplicatePersonException;
-import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.task.exceptions.DuplicateTaskException;
 import seedu.address.model.task.exceptions.TaskNotFoundException;
 
 /**
@@ -17,11 +16,9 @@ import seedu.address.model.task.exceptions.TaskNotFoundException;
  * implementation more straightforward.
  */
 public class TaskList implements Iterable<Task> {
-
     private final ObservableList<Task> internalList = FXCollections.observableArrayList();
     private final ObservableList<Task> internalUnmodifiableList =
             FXCollections.unmodifiableObservableList(internalList);
-
 
     /**
      * Returns true if a task with the same identity as {@code task} exists in the task list.
@@ -49,7 +46,6 @@ public class TaskList implements Iterable<Task> {
         }
     }
 
-
     /**
      * Replaces the given task {@code target} in the list with {@code editedTask}.
      * {@code target} must exist in the task list.
@@ -60,11 +56,11 @@ public class TaskList implements Iterable<Task> {
 
         int index = internalList.indexOf(target);
         if (index == -1) {
-            throw new PersonNotFoundException();
+            throw new TaskNotFoundException();
         }
 
         if (!target.equals(editedTask) && hasTask(editedTask)) {
-            throw new DuplicatePersonException();
+            throw new DuplicateTaskException();
         }
 
         internalList.set(index, editedTask);
@@ -73,7 +69,7 @@ public class TaskList implements Iterable<Task> {
     /**
      * Marks a task as done.
      */
-    public void markDone(Task toMark) {
+    public void markTask(Task toMark) {
         requireNonNull(toMark);
         if (!hasTask(toMark)) {
             throw new TaskNotFoundException();
@@ -82,7 +78,6 @@ public class TaskList implements Iterable<Task> {
         toMark.setIsDone(true);
         internalList.set(index, toMark);
     }
-
 
     public void setTasks(List<Task> tasks) {
         requireAllNonNull(tasks);

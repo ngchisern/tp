@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.stage.Stage?>
+
+<fx:root alwaysOnTop="true" title="Total Orders" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+  <icons>
+    <Image url="@/images/help_icon.png" />
+  </icons>
+  <scene>
+    <Scene>
+      <stylesheets>
+        <URL value="@Fonts.css" />
+      </stylesheets>
+
+      <HBox alignment="CENTER">
+        <opaqueInsets>
+          <Insets bottom="10.0" left="5.0" right="10.0" top="5.0" />
+        </opaqueInsets>
+        <padding>
+          <Insets bottom="10.0" left="5.0" right="10.0" top="5.0" />
+        </padding>
+            <children>
+               <TableView fx:id="table" prefHeight="400.0" prefWidth="400.0">
+                 <columns>
+                   <TableColumn fx:id="clientCol" prefWidth="250.0" text="Client" />
+                   <TableColumn fx:id="totalCol" prefWidth="150.0" text="Total Orders (S$)" />
+                 </columns>
+               </TableView>
+            </children>
+      </HBox>
+    </Scene>
+  </scene>
+</fx:root>

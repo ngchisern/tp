@@ -1,0 +1,18 @@
+{
+  "persons" : [ {
+    "name" : "Alice Pauline",
+    "gender": "FEMALE",
+    "phone" : "94351253",
+    "email" : "alice@example.com",
+    "measurement": "160_50_60_70",
+    "address" : "123, Jurong West Ave 6, #08-111",
+    "remark" : "dummy remark",
+    "tagged" : [ "friends" ]
+  } ],
+  "tasks" : [ {
+    "label" : "",
+    "date" : "18th of September 2021",
+    "taskTag": "SO2100",
+    "isDone" : "false"
+  }]
+}

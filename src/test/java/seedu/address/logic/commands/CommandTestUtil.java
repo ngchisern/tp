@@ -3,13 +3,18 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_AMOUNT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CUSTOMER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GENDER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LABEL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MEASUREMENT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_TAG;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
+import seedu.address.testutil.EditTaskDescriptorBuilder;
 
 /**
  * Contains helper methods for testing commands.
@@ -46,6 +52,18 @@ public class CommandTestUtil {
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
 
+    public static final String VALID_LABEL_ORDER = "Order Cloth";
+    public static final String VALID_LABEL_SEW = "Sew buttons onto blazer";
+    public static final String VALID_DATE_SEPT = "19th September 2021";
+    public static final String VALID_DATE_OCT = "12th October 2021";
+    public static final String VALID_TASKTAG_ORDER = "SO1000";
+    public static final String VALID_TASKTAG_SEW = "SO1";
+
+    public static final String VALID_CUSTOMER_SALE1 = "Muthu";
+    public static final String VALID_CUSTOMER_SALE2 = "Danish";
+    public static final String VALID_AMOUNT_SALE1 = "50";
+    public static final String VALID_AMOUNT_SALE2 = "30.90";
+
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
     public static final String GENDER_DESC_AMY = " " + PREFIX_GENDER + VALID_GENDER_AMY;
@@ -63,6 +81,18 @@ public class CommandTestUtil {
     public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
 
+    public static final String LABEL_DESC_ORDER = " " + PREFIX_LABEL + VALID_LABEL_ORDER;
+    public static final String LABEL_DESC_SEW = " " + PREFIX_LABEL + VALID_LABEL_SEW;
+    public static final String DATE_DESC_SEPT = " " + PREFIX_DATE + VALID_DATE_SEPT;
+    public static final String DATE_DESC_OCT = " " + PREFIX_DATE + VALID_DATE_OCT;
+    public static final String TASKTAG_DESC_ORDER = " " + PREFIX_TASK_TAG + VALID_TASKTAG_ORDER;
+    public static final String TASKTAG_DESC_SEW = " " + PREFIX_TASK_TAG + VALID_TASKTAG_SEW;
+
+    public static final String CUSTOMER_DESC_SALE1 = " " + PREFIX_CUSTOMER + VALID_CUSTOMER_SALE1;
+    public static final String CUSTOMER_DESC_SALE2 = " " + PREFIX_CUSTOMER + VALID_CUSTOMER_SALE2;
+    public static final String AMOUNT_DESC_SALE1 = " " + PREFIX_AMOUNT + VALID_AMOUNT_SALE1;
+    public static final String AMOUNT_DESC_SALE2 = " " + PREFIX_AMOUNT + VALID_AMOUNT_SALE2;
+
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_GENDER_DESC = " " + PREFIX_GENDER + "mimi"; // mimi is not a gender
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
@@ -72,11 +102,21 @@ public class CommandTestUtil {
     public static final String INVALID_REMARK_DESC = " " + PREFIX_REMARK + "^happy"; // '^' not allowed in remarks
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
 
+    public static final String INVALID_LABEL_DESC = " " + PREFIX_LABEL; // empty string not allowed for labels
+    public static final String INVALID_DATE_DESC = " " + PREFIX_DATE; // empty string not allowed for date
+    public static final String INVALID_TASKTAG_DESC = " " + PREFIX_TASK_TAG + "SOSO"; // wrong prefix and missing id
+
+    public static final String INVALID_CUSTOMER_DESC = " " + PREFIX_CUSTOMER; // empty string not allowed for customers
+    public static final String INVALID_AMOUNT_DESC = " " + PREFIX_AMOUNT + "20."; // no digit after dot
+
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
 
     public static final EditCommand.EditPersonDescriptor DESC_AMY;
     public static final EditCommand.EditPersonDescriptor DESC_BOB;
+
+    public static final EditTaskCommand.EditTaskDescriptor DESC_ORDER;
+    public static final EditTaskCommand.EditTaskDescriptor DESC_SEW;
 
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_AMY)
@@ -89,6 +129,11 @@ public class CommandTestUtil {
                 .withMeasurement(VALID_MEASUREMENT_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withRemark(VALID_REMARK_BOB)
                 .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
+
+        DESC_ORDER = new EditTaskDescriptorBuilder().withLabel(VALID_LABEL_ORDER).withDate(VALID_DATE_SEPT)
+                .withTaskTag(VALID_TASKTAG_ORDER).build();
+        DESC_SEW = new EditTaskDescriptorBuilder().withLabel(VALID_LABEL_SEW).withDate(VALID_DATE_OCT)
+                .withTaskTag(VALID_TASKTAG_SEW).build();
     }
 
     /**
@@ -133,6 +178,7 @@ public class CommandTestUtil {
         assertEquals(expectedAddressBook, actualModel.getAddressBook());
         assertEquals(expectedFilteredList, actualModel.getFilteredPersonList());
     }
+
     /**
      * Updates {@code model}'s filtered list to show only the person at the given {@code targetIndex} in the
      * {@code model}'s address book.
@@ -146,5 +192,4 @@ public class CommandTestUtil {
 
         assertEquals(1, model.getFilteredPersonList().size());
     }
-
 }
